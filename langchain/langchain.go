@@ -12,7 +12,7 @@ type Scraper struct {
 	CallbacksHandler callbacks.Handler
 }
 
-func New() *Scraper {
+func NewScraper() *Scraper {
 	return &Scraper{}
 }
 

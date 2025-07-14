@@ -1,6 +1,6 @@
 # mcp-web-scraper
 
-This package uses Google Chrome's headless APIs to scrape web pages.
+This package uses Google Chrome's headless APIs to scrape web pages for AI/LLM agents.
 
 Because it uses Chrome as its default user agent, any sites that require Javascript (for example, single page applications) should also be parsable with this tool.
 
@@ -41,6 +41,20 @@ go build .
   }
 }
 ```
+
+## LangChainGo tool
+
+Integration into langchain is easy:
+
+```go
+import 	"github.com/lmorg/mcp-web-scraper/langchain"
+
+func example() {
+    scraper := langchain.NewScraper()
+}
+```
+
+Please consult the [langchaingo docs](https://tmc.github.io/langchaingo/docs/) for how to use tools with their libraries.
 
 ## Fallback Modes
 
