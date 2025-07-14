@@ -4,13 +4,10 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"regexp"
-	"strings"
 	"time"
 
-	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
 	"github.com/chromedp/chromedp"
 )
 
@@ -45,7 +42,9 @@ func Scrape(ctx context.Context, url string) (string, error) {
 		}
 	}
 
-	md, mdErr := htmltomarkdown.ConvertString(response)
+	return response, nil
+
+	/*md, mdErr := htmltomarkdown.ConvertString(response)
 	if mdErr == nil {
 		// markdown conversion successful so lets return early
 		return md, nil
@@ -63,7 +62,7 @@ func Scrape(ctx context.Context, url string) (string, error) {
 		}
 	}
 
-	return response, nil
+	return response, nil*/
 }
 
 // ChromeScraper requires Google Chrome installed.
