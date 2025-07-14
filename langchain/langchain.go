@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/lmorg/mcp-scrape-page/internal"
+	"github.com/lmorg/mcp-web-scraper/internal"
 	"github.com/tmc/langchaingo/callbacks"
 )
 

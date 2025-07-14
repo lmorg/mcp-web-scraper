@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/lmorg/mcp-scrape-page/internal"
+	"github.com/lmorg/mcp-web-scraper/internal"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
