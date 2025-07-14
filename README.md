@@ -4,7 +4,7 @@ This package uses Google Chrome's headless APIs to scrape web pages.
 
 Because it uses Chrome as its default user agent, any sites that require Javascript (for example, single page applications) should also be parsable with this tool.
 
-It supports being called either from Go (go lang) via LangChainGo, or as an MCP server.
+It supports being called either from Go (go lang) via [LangChainGo](https://github.com/tmc/langchaingo/tree/main), or as an MCP server.
 
 ## MCP Server
 
