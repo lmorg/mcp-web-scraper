@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/chromedp/chromedp"
@@ -43,13 +45,11 @@ func Scrape(ctx context.Context, url string) (string, error) {
 		}
 	}
 
-	return response, nil
-
 	/*md, mdErr := htmltomarkdown.ConvertString(response)
 	if mdErr == nil {
 		// markdown conversion successful so lets return early
 		return md, nil
-	}
+	}*/
 
 	// we cannot parse the HTML document via correct methods,
 	// so now lets focus on reducing the token count so the LLM
@@ -63,7 +63,7 @@ func Scrape(ctx context.Context, url string) (string, error) {
 		}
 	}
 
-	return response, nil*/
+	return response, nil
 }
 
 // ChromeScraper requires Google Chrome installed.
