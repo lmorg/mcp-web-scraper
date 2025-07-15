@@ -23,6 +23,7 @@ var (
 		regexp.MustCompile(`(?si)<head( |>).*?</head>`),
 		regexp.MustCompile(`(?si)<svg( |>).*?</svg>`),
 		regexp.MustCompile(`(?si)<script( |>).*?</script>`),
+		regexp.MustCompile(`(?si)<!--.*?-->`),
 	}
 )
 
