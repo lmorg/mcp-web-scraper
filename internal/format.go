@@ -10,9 +10,11 @@ import (
 
 func toMarkdown(input string) string {
 	md, err := htmltomarkdown.ConvertString(input)
-	if err != nil {
-		return ""
+
+	if err != nil || md == "" {
+		return toHtml(input)
 	}
+
 	return md
 }
 

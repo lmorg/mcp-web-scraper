@@ -63,3 +63,11 @@ Please consult the [langchaingo docs](https://tmc.github.io/langchaingo/docs/) f
 If you do not have Google Chrome installed, then mcp-web-scraper will fallback to use Go's HTTP user agent.
 
 This will work in the majority of cases, however you might not get any content for sites that requires Javascript to render.
+
+### Markdown Support
+
+By default this module will look for `<article>` and convert that to Markdown.
+
+If either the page doesn't present itself as an article of some description (eg not a blog, technical documentation, etc) then this module will fallback to returning HTML.
+
+Any HTML document returned will have specific HTML tags removed (such as `<script>`, `<svg>`, and HTML comments) to reduce the tokens required for the LLM to parse
