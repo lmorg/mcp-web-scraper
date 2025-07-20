@@ -4,66 +4,27 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
-	"regexp"
-	"strings"
 	"time"
 
 	"github.com/chromedp/chromedp"
 )
 
-var (
-	// I know you shouldn't use regex to parse HTML.
-	// This is only used in the extreme edge case that a markdown document
-	// cannot be automatically generated from the HTML document. At that
-	// point the HTML parser has already failed and we are now looking to
-	// use an LLM for parsing. In that instance, our token count will be
-	// massive so stripping the following HTML tags via regexp, while crude,
-	// will reduce the token count.
-	rxHtml = []*regexp.Regexp{
-		regexp.MustCompile(`(?si)<head( |>).*?</head>`),
-		regexp.MustCompile(`(?si)<svg( |>).*?</svg>`),
-		regexp.MustCompile(`(?si)<script( |>).*?</script>`),
-		regexp.MustCompile(`(?si)<!--.*?-->`),
-	}
-)
-
 func Scrape(ctx context.Context, url string) (string, error) {
 	response, chromeScraperErr := ChromeScraper(ctx, url)
 
-	if chromeScraperErr != nil || response == "" {
-		var goScraperErr error
-		response, goScraperErr = GoScraper(url)
-
-		if goScraperErr != nil {
-			return "", fmt.Errorf("cannot scrape URL: Chrome[%v], Go[%v]", chromeScraperErr, goScraperErr)
-		}
-
-		if response == "" {
-			return "", fmt.Errorf("empty page")
-		}
+	if chromeScraperErr == nil {
+		return response, nil
 	}
 
-	/*md, mdErr := htmltomarkdown.ConvertString(response)
-	if mdErr == nil {
-		// markdown conversion successful so lets return early
-		return md, nil
-	}*/
+	var goScraperErr error
+	response, goScraperErr = GoScraper(url)
 
-	// we cannot parse the HTML document via correct methods,
-	// so now lets focus on reducing the token count so the LLM
-	// can parse the HTML document fast and cost-effectively.
-	// Yes it's ugly, but it works.
-	for _, rx := range rxHtml {
-		found := rx.FindAllString(response, -1)
-		for i := range found {
-			log.Println(found[i])
-			response = strings.Replace(response, found[i], "", 1)
-		}
+	if goScraperErr == nil {
+		return response, nil
 	}
 
-	return response, nil
+	return "", fmt.Errorf("cannot scrape URL: Chrome[%v], Go[%v]", chromeScraperErr, goScraperErr)
 }
 
 // ChromeScraper requires Google Chrome installed.
@@ -91,10 +52,14 @@ func ChromeScraper(ctx context.Context, url string) (string, error) {
 	// fallback to returning the entire body if the page either isn't an
 	// article and/or doesn't include the HTML5 <article> tag.
 	if article != "" {
-		return article, nil
+		return toMarkdown(article), nil
 	}
 
-	return body, nil
+	if article != "" {
+		return toHtml(body), nil
+	}
+
+	return "", fmt.Errorf("empty page")
 }
 
 // GoScraper returns a document using Go's HTTP user agent.
@@ -123,5 +88,9 @@ func GoScraper(url string) (string, error) {
 		return "", fmt.Errorf("error reading fallback request: %v", err)
 	}
 
-	return string(body), err
+	if len(body) != 0 {
+		return toHtml(string(body)), nil
+	}
+
+	return "", fmt.Errorf("empty page")
 }
