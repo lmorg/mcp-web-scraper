@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"log"
 	"regexp"
 	"strings"
 
@@ -42,7 +41,6 @@ func toHtml(input string) string {
 	for _, rx := range rxHtml {
 		found := rx.FindAllString(input, -1)
 		for i := range found {
-			log.Println(found[i])
 			input = strings.Replace(input, found[i], "", 1)
 		}
 	}

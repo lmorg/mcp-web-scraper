@@ -13,7 +13,7 @@ func main() {
 	// Create a new MCP server
 	s := server.NewMCPServer(
 		internal.Name,
-		"1.0.0",
+		"1.0.2",
 		server.WithToolCapabilities(false),
 	)
 
